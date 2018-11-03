@@ -1,0 +1,74 @@
+{
+    "settings": {
+	"index.mapping.ignore_malformed": true
+    },
+
+    "mappings": {
+	"doc": {
+	    "date_detection": false,
+	    "properties": {
+
+		"Package": {
+		    "type": "text",
+		    "analyzer": "english",
+		    "fields": {
+			"raw": {
+			    "type": "keyword"
+			}
+		    }
+		},
+
+		"Title": {
+		    "type": "text",
+		    "analyzer": "english"
+		},
+
+		"Version": {
+		    "type": "keyword"
+		},
+
+		"Author": {
+		    "type": "keyword"
+		},
+
+		"Maintainer": {
+		    "type": "keyword"
+		},
+
+		"Description": {
+		    "type": "text",
+		    "analyzer": "english"
+		},
+
+		"License": {
+		    "type": "keyword"
+		},
+
+		"URL": {
+		    "type": "keyword"
+		},
+
+		"BugReports": {
+		    "type": "keyword"
+		},
+
+		"Date": {
+		    "type": "keyword"
+		},
+
+		"date": {
+		    "type": "date"
+		}
+	    },
+
+	    "dynamic_templates": [{
+		"strings_as_text": {
+		    "match_mapping_type": "string",
+		    "mapping": {
+			"type": "text"
+		    }
+		}
+	    }]
+	}
+    }
+}

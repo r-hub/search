@@ -1,0 +1,62 @@
+
+version: '3.3'
+
+volumes:
+  logstash-data:
+  package-data:
+
+services:
+
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:6.4.2"
+    environment:
+    - cluster.name=search-cluster
+    - bootstrap.memory_lock=true
+    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - package-data:/usr/share/elasticsearch/data
+    ports:
+    - "9201:9200"
+
+  elastic-seed:
+    build: ./seed
+    image: "rhub/search-seed:0.0.1"
+    depends_on:
+    - elasticsearch
+    entrypoint:
+    - bash
+    - -c
+    - /seed/elastic.sh
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  logstash:
+    build: ./logstash
+    image: "rhub/search-logstash:0.0.1"
+    volumes:
+    - logstash-data:/usr/share/logstash/data
+    ports:
+    - "9600:9600"
+    depends_on:
+    - elasticsearch
+    - elastic-seed
+
+  nginx:
+    build: ./nginx
+    image: "rhub/search-nginx:0.0.1"
+    ports:
+    - "9200:9200"
+    depends_on:
+    - elasticsearch
+    entrypoint:
+    - sh
+    - -c
+    - /entrypoint.sh
+    deploy:
+      restart_policy:
+        condition: on-failure
