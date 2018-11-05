@@ -60,3 +60,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+
+  cron:
+    build: ./cron
+    image: "rhub/search-cron:0.0.1"
+    depends_on:
+    - elasticsearch
