@@ -47,7 +47,7 @@ services:
     build: ./nginx
     image: "rhub/search-nginx:0.0.1"
     ports:
-    - "9200:9200"
+    - "80:80"
     depends_on:
     - elasticsearch
     entrypoint:
