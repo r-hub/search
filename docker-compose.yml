@@ -8,7 +8,8 @@ volumes:
 services:
 
   elasticsearch:
-    image: "docker.elastic.co/elasticsearch/elasticsearch:6.4.2"
+    build: ./elasticsearch
+    image: "rhub/search-elasticsearch:0.0.1"
     environment:
     - cluster.name=search-cluster
     - bootstrap.memory_lock=true
