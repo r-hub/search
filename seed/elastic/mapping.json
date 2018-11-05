@@ -58,6 +58,14 @@
 
 		"date": {
 		    "type": "date"
+		},
+
+		"revdeps": {
+		    "type": "long"
+		},
+
+		"downloads": {
+		    "type": "long"
 		}
 	    },
 

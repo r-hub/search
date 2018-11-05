@@ -40,11 +40,9 @@ var job = new CronJob({
 	    var resp = await got(CRANLOGS, { json: true });
 	    var dlds = resp.body;
 	    console.log('Updating ' + dlds.length + ' package downloads');
-	    var most = Number(dlds[0].count);
-	    var fact = 1000000.0 / most;
 	    for (p in dlds) {
 		var pkg = dlds[p].package;
-		var num = Number(dlds[p].count) * fact;
+		var num = Number(dlds[p].count);
 		var body = { 'doc': { 'downloads': num  } };
 		try {
 		    await got(ES_URL + 'package/doc/' + pkg + '/_update', {
