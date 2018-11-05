@@ -1,6 +1,11 @@
 {
     "settings": {
 	"index.mapping.ignore_malformed": true,
+        "index.analysis.analyzer.default.tokenizer": "standard",
+        "index.analysis.analyzer.default.filter.0": "standard",
+        "index.analysis.analyzer.default.filter.1": "lowercase",
+        "index.analysis.analyzer.default.filter.2": "stop",
+        "index.analysis.analyzer.default.filter.3": "asciifolding",
 
 	"analysis": {
 	    "filter": {
@@ -31,6 +36,7 @@
 		    "filter": [
 			"english_possessive_stemmer",
 			"lowercase",
+			"asciifolding",
 			"english_stop",
 			"english_keywords",
 			"english_stemmer",
@@ -51,7 +57,7 @@
 		    "analyzer": "english_and_synonyms",
 		    "fields": {
 			"raw": {
-			    "type": "keyword"
+			    "type": "text"
 			}
 		    }
 		},
@@ -62,15 +68,17 @@
 		},
 
 		"Version": {
-		    "type": "keyword"
+		    "type": "text"
 		},
 
 		"Author": {
-		    "type": "keyword"
+		    "type": "text",
+		    "analyzer": "default"
 		},
 
 		"Maintainer": {
-		    "type": "keyword"
+		    "type": "text",
+		    "analyzer": "default"
 		},
 
 		"Description": {
@@ -79,19 +87,23 @@
 		},
 
 		"License": {
-		    "type": "keyword"
+		    "type": "text",
+		    "analyzer": "default"
 		},
 
 		"URL": {
-		    "type": "keyword"
+		    "type": "text",
+		    "analyzer": "default"
 		},
 
 		"BugReports": {
-		    "type": "keyword"
+		    "type": "text",
+		    "analyzer": "default"
 		},
 
 		"Date": {
-		    "type": "keyword"
+		    "type": "text",
+		    "analyzer": "default"
 		},
 
 		"date": {
@@ -111,7 +123,8 @@
 		"strings_as_text": {
 		    "match_mapping_type": "string",
 		    "mapping": {
-			"type": "text"
+			"type": "text",
+			"analyzer": "default"
 		    }
 		}
 	    }]
