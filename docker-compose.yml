@@ -20,6 +20,10 @@ services:
         hard: -1
     volumes:
       - package-data:/usr/share/elasticsearch/data
+    deploy:
+      restart_policy:
+        delay: 5s
+        window: 30s
 
   elastic-seed:
     build: ./seed
@@ -42,6 +46,11 @@ services:
     depends_on:
     - elasticsearch
     - elastic-seed
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        window: 30s
 
   nginx:
     build: ./nginx
@@ -56,10 +65,15 @@ services:
     - /entrypoint.sh
     deploy:
       restart_policy:
-        condition: on-failure
+        condition: any
+        delay: 5s
+        window: 10s
 
   cron:
     build: ./cron
     image: "rhub/search-cron:0.0.1"
     depends_on:
     - elasticsearch
+    deploy:
+      restart_policy:
+        condition: any
