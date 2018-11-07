@@ -12,7 +12,7 @@ services:
     image: "rhub/search-elasticsearch:0.0.1"
     environment:
     - cluster.name=search-cluster
-    - bootstrap.memory_lock=true
+    - bootstrap.memory_lock=false
     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
