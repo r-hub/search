@@ -37,9 +37,10 @@ def filter(event)
     return []
   end
 
-  # set revdeps
+  # set revdeps, downloads
   latest = doc["versions"][ doc["latest"] ]
   latest["revdeps"] = doc["revdeps"] || 1
+  latest["downloads"] = doc["downloads"] || 1
 
   # squash dependency fields
   latest["Imports"] = paste(latest["Imports"])
