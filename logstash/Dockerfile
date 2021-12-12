@@ -1,5 +1,5 @@
 
-FROM docker.elastic.co/logstash/logstash:6.4.2
+FROM docker.elastic.co/logstash/logstash:7.16.0
 
 RUN logstash-plugin install logstash-input-couchdb_changes
 RUN logstash-plugin install logstash-filter-ruby
