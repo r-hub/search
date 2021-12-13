@@ -9,7 +9,7 @@ services:
 
   elasticsearch:
     build: ./elasticsearch
-    image: "rhub/search-elasticsearch:0.0.1"
+    image: "rhub/search-elasticsearch:0.0.2"
     environment:
     - cluster.name=search-cluster
     - bootstrap.memory_lock=false
@@ -27,7 +27,7 @@ services:
 
   elastic-seed:
     build: ./seed
-    image: "rhub/search-seed:0.0.1"
+    image: "rhub/search-seed:0.0.2"
     depends_on:
     - elasticsearch
     entrypoint:
@@ -40,7 +40,7 @@ services:
 
   logstash:
     build: ./logstash
-    image: "rhub/search-logstash:0.0.1"
+    image: "rhub/search-logstash:0.0.2"
     volumes:
     - logstash-data:/usr/share/logstash/data
     depends_on:
@@ -54,7 +54,7 @@ services:
 
   nginx:
     build: ./nginx
-    image: "rhub/search-nginx:0.0.1"
+    image: "rhub/search-nginx:0.0.2"
     ports:
     - "80:80"
     depends_on:
@@ -71,7 +71,7 @@ services:
 
   cron:
     build: ./cron
-    image: "rhub/search-cron:0.0.1"
+    image: "rhub/search-cron:0.0.2"
     depends_on:
     - elasticsearch
     deploy:
