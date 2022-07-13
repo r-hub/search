@@ -28,8 +28,6 @@ services:
   elastic-seed:
     build: ./seed
     image: "rhub/search-seed:0.0.4"
-    depends_on:
-    - elasticsearch
     entrypoint:
     - bash
     - -c
@@ -43,9 +41,6 @@ services:
     image: "rhub/search-logstash:0.0.4"
     volumes:
     - logstash-data:/usr/share/logstash/data
-    depends_on:
-    - elasticsearch
-    - elastic-seed
     deploy:
       restart_policy:
         condition: any
@@ -57,8 +52,6 @@ services:
     image: "rhub/search-nginx:0.0.4"
     ports:
     - "80:80"
-    depends_on:
-    - elasticsearch
     entrypoint:
     - sh
     - -c
@@ -72,8 +65,6 @@ services:
   cron:
     build: ./cron
     image: "rhub/search-cron:0.0.4"
-    depends_on:
-    - elasticsearch
     deploy:
       restart_policy:
         condition: any
