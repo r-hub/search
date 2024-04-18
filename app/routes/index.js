@@ -31,6 +31,7 @@ router.get('/package/_search', async function (req, res, next) {
       .status(eres.statusCode)
       .send(post_process(eres.body));
   } catch (err) {
+    console.log(err);
     next(err);
   }
 });
@@ -40,7 +41,6 @@ router.post('/package/_search',
   async function (req, res, next) {
     try {
       const qurl = baseurl + req.originalUrl;
-      console.log(body);
       const eres = await got.post(qurl, {
         throwHttpErrors: false,
         body: req.body,
@@ -53,6 +53,8 @@ router.post('/package/_search',
         .status(eres.statusCode)
         .send(post_process(eres.body));
     } catch (err) {
+      console.log(req.body);
+      console.log(err);
       next(err);
     }
   }
