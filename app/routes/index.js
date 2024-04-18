@@ -12,10 +12,6 @@ if (!url) {
 const params = url.parse(es_url);
 const baseurl = 'http://' + params.hostname + ':' + params.port;
 
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
 function post_process(txt) {
   var obj = JSON.parse(txt);
   if (obj.hits && obj.hits.total && obj.hits.total.value !== undefined) {
@@ -26,30 +22,39 @@ function post_process(txt) {
 
 // TODO: we really should stream these
 
-router.get('/package/_search', async function(req, res, next) {
-  const qurl = baseurl + req.originalUrl;
-  const eres = await got(qurl, { throwHttpErrors: false });
-  res
-    .set('content-type', 'application/json')
-    .status(eres.statusCode)
-    .send(post_process(eres.body));
-});
-
-router.post('/package/_search',
-  express.text({ type: 'application/json' }),
-  async function(req, res, next) {
+router.get('/package/_search', async function (req, res, next) {
+  try {
     const qurl = baseurl + req.originalUrl;
-    const eres = await got.post(qurl, {
-      throwHttpErrors: false,
-      body: req.body,
-      headers: {
-        'content-type': 'application/json'
-      }
-    });
+    const eres = await got(qurl, { throwHttpErrors: false });
     res
       .set('content-type', 'application/json')
       .status(eres.statusCode)
       .send(post_process(eres.body));
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/package/_search',
+  express.text({ type: 'application/json' }),
+  async function (req, res, next) {
+    try {
+      const qurl = baseurl + req.originalUrl;
+      console.log(body);
+      const eres = await got.post(qurl, {
+        throwHttpErrors: false,
+        body: req.body,
+        headers: {
+          'content-type': 'application/json'
+        }
+      });
+      res
+        .set('content-type', 'application/json')
+        .status(eres.statusCode)
+        .send(post_process(eres.body));
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
