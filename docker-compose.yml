@@ -1,8 +1,6 @@
-
 version: '3.3'
 
 volumes:
-  logstash-data:
   package-data:
 
 services:
@@ -29,3 +27,5 @@ services:
     command: nodemon bin/www.js
     volumes:
     - ./app:/src
+    environment:
+    - ELASTICSEARCH_URL=http://elasticsearch:9200

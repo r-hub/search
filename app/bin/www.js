@@ -7,6 +7,11 @@
 import app from '../app.js';
 import http from 'http';
 
+/* Init elasticsaerch server before anything else */
+
+import init_elastic from '../lib/init-elastic.js';
+await init_elastic();
+
 /**
  * Get port from environment and store in Express.
  */
