@@ -67,7 +67,7 @@ async function init_cron() {
 
 		},
 		start: false,
-		runOnInit: false
+		runOnInit: true
 	});
 	return job;
 }
