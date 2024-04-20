@@ -105,3 +105,37 @@ dokku config:set cran-search-logstash DOKKU_WAIT_TO_RETIRE=0
 ```
 
 Seems to work fine.
+
+# 2034-04-20
+
+OK, I figured out how not to redirect http to https. We need a
+customized nginx.conf.sigil file, but the customization is very simple:
+```
+diff --git a/app/nginx.conf.sigil b/app/nginx.conf.sigil
+index be13943..94c7a25 100644
+--- a/app/nginx.conf.sigil
++++ b/app/nginx.conf.sigil
+@@ -12,7 +12,7 @@ server {
+   access_log  {{ $.NGINX_ACCESS_LOG_PATH }}{{ if and ($.NGINX_ACCESS_LOG_FORMAT) (ne $.NGINX_ACCESS_LOG_PATH "off") }} {{ $.NGINX_ACCESS_LOG_FORMAT }}{{ end }};
+   error_log   {{ $.NGINX_ERROR_LOG_PATH }};
+   underscores_in_headers {{ $.NGINX_UNDERSCORE_IN_HEADERS }};
+-{{ if (and (eq $listen_port "80") ($.SSL_INUSE)) }}
++{{ if eq "true" "false" }}
+   include {{ $.DOKKU_ROOT }}/{{ $.APP }}/nginx.conf.d/*.conf;
+   location / {
+     return 301 https://$host:{{ $.PROXY_SSL_PORT }}$request_uri;
+```
+
+We want to store this file in `/app`, so we also need this config:
+```
+dokku nginx:set cran-search nginx-conf-sigil-path app/nginx.conf.sigil
+```
+and then turn on https:
+```
+dokku letsencrypt:enable cran-search
+```
+and then test both http (also tested on the status page currently) and
+https.
+
+We can also switch to https in the pkgsearch package, and the metacran
+web page.
