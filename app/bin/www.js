@@ -11,6 +11,9 @@ import http from 'http';
 
 import init_elastic from '../lib/init-elastic.js';
 await init_elastic();
+import init_cron from '../lib/cron.js';
+const cron_job = await init_cron()
+cron_job.start();
 
 /**
  * Get port from environment and store in Express.
