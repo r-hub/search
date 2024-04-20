@@ -2,6 +2,7 @@ version: '3.3'
 
 volumes:
   package-data:
+  logstash-data:
 
 services:
 
@@ -17,6 +18,10 @@ services:
     volumes:
     - package-data:/usr/share/elasticsearch/data
     - ./elastic/synonyms.txt:/usr/share/elasticsearch/config/synonyms.txt
+    networks:
+      default:
+        aliases:
+        - dokku-elasticsearch-cran
 
   app:
     build:
@@ -29,3 +34,10 @@ services:
     - ./app:/src
     environment:
     - ELASTICSEARCH_URL=http://elasticsearch:9200
+
+  logstash:
+    build:
+      context: .
+      dockerfile: ./logstash/Dockerfile
+    volumes:
+    - logstash-data:/usr/share/logstash/data

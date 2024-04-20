@@ -65,3 +65,32 @@ dokku domains:add cran-search search.r-pkg.org
 Avoiding the http -> https redirection seems surprisingly difficult
 in Dokku, so we'll need another strategy. E.g. have another dokku app
 that servers https only, and then later switch to that completely.
+
+# 2024-04-20
+
+Implementing updates. This needs a logstash container by us, running as
+another app.
+
+We need to hardcode the host name of the elasticsearch server, which is
+`dokku-elasticsearch-cran` on dokku, so we add this as an alias in
+`docker-compose.yml`, so logstash can be tested locally as well.
+```
+dokku apps:create cran-search-logstash
+dokku elasticsearch:link cran cran-search-logstash
+dokku builder-dockerfile:set cran-search-logstash \
+  dockerfile-path logstash/Dockerfile
+```
+
+We'll create a bind mount for the data, so it is kept between
+deployments:
+```
+mkdir /logstash-data
+dokku storage:mount cran-search-logstash \
+    /logstash-data:/usr/share/logstash/data
+```
+
+Locally:
+```
+git remote add dokku-logstash dokku@api.r-pkg.org:cran-search-logstash
+git push dokku-logstash
+```
