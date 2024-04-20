@@ -84,9 +84,9 @@ dokku builder-dockerfile:set cran-search-logstash \
 We'll create a bind mount for the data, so it is kept between
 deployments:
 ```
-mkdir /logstash-data
+mkdir -p /volumes/logstash-data
 dokku storage:mount cran-search-logstash \
-    /logstash-data:/usr/share/logstash/data
+    /volumes/logstash-data:/usr/share/logstash/data
 ```
 
 Locally:
@@ -94,3 +94,14 @@ Locally:
 git remote add dokku-logstash dokku@api.r-pkg.org:cran-search-logstash
 git push dokku-logstash
 ```
+
+Seems like the dokku deployment does not work now, because two
+logstash instances cannot use the same data directory. Let's try
+to disable it. If this does not work then I need to stop the old instance
+before each deployment:
+```
+dokku checks:disable cran-search-logstash
+dokku config:set cran-search-logstash DOKKU_WAIT_TO_RETIRE=0
+```
+
+Seems to work fine.
