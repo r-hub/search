@@ -1,7 +1,7 @@
 import { CronJob } from 'cron';
 import got from 'got';
 
-const CRON_JOB_UPDATE = '50 15 3 * * *';
+const CRON_JOB_UPDATE = '0 45 19 * * *';
 
 const CRANDB_REVDEPS =
 	'https://crandb.r-pkg.org:2053/cran/_design/internal/_view/' +
@@ -67,7 +67,7 @@ async function init_cron() {
 
 		},
 		start: false,
-		runOnInit: false
+		runOnInit: true
 	});
 	return job;
 }
